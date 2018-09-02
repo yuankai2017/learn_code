@@ -1,0 +1,46 @@
+
+
+SHELL = /bin/sh
+RM = rm -f
+
+srcdir = .
+VPATH = .:.
+top_srcdir = ..
+
+DEFS =
+
+PREX = 
+CC = $(PREX)gcc
+AR = $(PREX)ar
+LD = $(PREX)ld
+STRIP = $(PREX)strip
+CFLAGS =-O3
+DEFS =
+LOCAL_CFLAGS = -Wall
+CPPFLAGS =
+
+INCLUDES = -I/usr/include/libxml2/  -I./
+CCFLAGS = $(DEFS) $(LOCAL_CFLAGS) $(CPPFLAGS) $(INCLUDES) $(CFLAGS)
+LDFLAGS = -L./
+ARFLAGS = -ru
+
+rl_OBJECTS =
+
+rl_SOURCES =
+
+OBJECTS = lte.o fpga_resource.o  view.o  api.o  rf_485.o  \
+		l3_msg.o statistic.o lte_param.o test.o
+
+td_lte_control:$(OBJECTS)
+	$(CC) $(LDFLAGS) -o $@ $(OBJECTS) -lpthread -lm -lrt
+	@$(STRIP) td_lte_control
+	@chmod +x td_lte_control
+
+.c.o:
+	${RM} $@
+	$(CC) $(CCFLAGS) -o $@ -lrt -c $<
+#	$(CC) $(CCFLAGS) -o $@ -c -std=c99 $<
+
+clean:
+	$(RM) *.o
+	$(RM) ./td_lte_control
